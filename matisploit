@@ -14,7 +14,7 @@ sudo airmon-ng start $interfaz
 sleep 1 
 mts
 else
-mts
+mtsconfig
 fi
 }
 ################################################
