@@ -1,3 +1,0 @@
-#! /bin/bash
-source mtsconfig.sh
-$editor_de_texto /$userr/Escritorio/ncrack.txt
