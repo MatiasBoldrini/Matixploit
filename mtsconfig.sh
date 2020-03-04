@@ -1,8 +1,5 @@
 #! /bin/bash
 export numero_a_adivinar="10000"
-export userr="/home/matias"
-export editor_de_texto="nano"
-export namee="matias"
 export interfaz="wlo1"
 export monitor="wlo1mon"
 string='n'
