@@ -1,10 +1,4 @@
 # Instalation :
 git clone https://github.com/ShadowFighter99/Matixploit && cd Matixploit &&  sudo chmod +x * && sudo rm README.md && sudo cp * /usr/local/bin 
-
-# Debian : 
-
-sudo apt install  crunch nmap aircrack-ng macchanger cupp(opcional)
-
-# Arch :
-
-sudo pacman -S  crunch nmap aircrack-ng macchanger cupp(opcional)
+# Dependencias :
+El script instala todo, a menos que uses arch 
