@@ -17,9 +17,15 @@ La opcion 3 crackea una red wifi con ayuda de un diccionario de permutaciones ge
 La opcion 4, 5 , 6 son funciones de mapeo de red que no van a ser utiles hasta que incluya msfvenom en el script.
 **Activar/Desactivar modo monitor**
 Estas opciones lo unico que hacen es desactivar el modo monitor, lo cual sirve para restablecer la conexion a la red.
+# Cambiador de Mac:
+Con la opcion N°6, se puede "Enmascarar" tu direccion mac, de cualquier manera, estoy creando un diccionario para falsificar el fabricante. Ya que el anterior está en algún lugar de google drive o borrado.
+# MSFVENOM
+Voy a añadir msfvenom cuando vea q tiene compatibilidad con android 9, me parece inutil meterlo por ahora.., al menos para el hacking de teléfonos.
 # Instrucciones:
 Presionar el numero 1 (Ataques wifi), y elegir una opcion (1 o 3), El script es muy intuitivo, pero De cualquier manera, hay que saber esto:
 
 **BSSID**= Mac del router
 **ch**=Canal en la que se encuentra el router
 Para instrucciones mas detalladas , visitar el otro repo de BlurKDE en donde hay unn video mas detallado del uso de la herramienta.
+# Conexion wifi:
+Al cerrar el script vas a tener que volver a poner tu tarjeta en modo administrada, (desactivar modo monitor), para esto, escribi mts 5, y responde con una "y". 
