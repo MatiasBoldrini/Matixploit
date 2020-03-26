@@ -1,8 +1,11 @@
 # Instalacion :
+Solo disponible para sistemas con pkgmgr : apt, dnf, pacman, quizas haga los de zypper o los de gentoo luego. Si estás en una distribución distinta, no voy a dejar las newbie-instructions , porque supongo que no hace falta que instales el script, ya que quizas hay mejores opciones como fluxion o lazyscript, pero esto almenos no rompe el sistema :).
+# Debian : 
 sudo apt -y install git;git clone https://github.com/ShadowFighter99/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
-# Dependencias :
-El script instala todo si usas ubuntu, si usas una distro distinta , estas son las dependencias :
-net-tools crunch nmap aircrack-ng macchanger cupp
+# Arch:
+sudo pacman -S install git;git clone https://github.com/ShadowFighter99/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
+# Fedora :
+sudo dnf install git;git clone https://github.com/ShadowFighter99/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
 # Comandos:
 **Ataques Wifi(opcion 1 del menu principal)**
 La opcion 1, crackea una red wifi con ayuda de un diccionario, para crearlo, seleccionar la opcion 2 del menu principal.
