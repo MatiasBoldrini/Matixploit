@@ -89,21 +89,15 @@ sudo airodump-ng -c $canal --bssid $macr $monitor -w $essid #Se deja en este mod
 
 ##############################################
 function cambiar_mac() {
-echo "Dispositivo a cambiar ( eth0 , $interfaz)"
-read -p " mts ▷▷▷ "  dispositivo
-if [ $dispositivo == '' ]
-then
-$dispositivo=$interfaz
-echo "$dispositivo"
-fi
+
 echo " 1)RESET MAC"
 echo " 2)NUEVA MAC"
 read -p " mts ▷▷▷ "  macelection
 if [ $macelection == 1 ]
 then 
-sudo ifconfig $dispositivo down
-sudo macchanger --permanent $dispositivo
-sudo ifconfig $dispositivo up
+sudo ifconfig $interfaz down
+sudo macchanger --permanent $interfaz
+sudo ifconfig $interfaz up
 fi
 if [ $macelection == 2 ]
 then 
@@ -112,17 +106,17 @@ echo " 2)Personalizada"
 read -p " mts ▷▷▷ "  custommac
 if [ $custommac == 1 ]
 then
-sudo ifconfig $dispositivo down
-sudo macchanger -r $dispositivo
-sudo ifconfig $dispositivo up
+sudo ifconfig $interfaz down
+sudo macchanger -r $interfaz
+sudo ifconfig $interfaz up
 fi
 if [ $custommac == 2 ]
 then 
 echo "Qué MAC desea"
 read -p " mts ▷▷▷ "  macwrite
-sudo ifconfig $dispositivo down
-sudo macchanger -m $macwrite $dispositivo
-sudo ifconfig $dispositivo up
+sudo ifconfig $interfaz down
+sudo macchanger -m $macwrite $interfaz
+sudo ifconfig $interfaz up
 fi
 fi
 }
