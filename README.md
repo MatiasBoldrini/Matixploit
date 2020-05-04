@@ -1,5 +1,5 @@
 # Instalacion :
-Solo disponible para sistemas con pkgmgr : apt, dnf, pacman, quizas haga los de zypper o los de gentoo luego. Si estás en una distribución distinta, no voy a dejar las newbie-instructions , porque supongo que no hace falta que instales el script, ya que quizas hay mejores opciones como fluxion o lazyscript, pero esto almenos no rompe el sistema :).
+Solo disponible para sistemas derivados de Arch, Debain o Red hat. Proximamente vca a estar disponible para sistemas mas complejos, como freeBSD , gentoo u otro, pero, no voy a dejar las newbie-instructions , porque supongo que no hace falta que instales el script, ya que quizas hay mejores opciones como fluxion o lazyscript, pero esto al menos no rompe el sistema :).
 # Debian : 
 sudo apt -y install git;git clone https://github.com/ShadowFighter99/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
 # Arch:
