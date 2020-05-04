@@ -27,10 +27,12 @@ sleep 1
 echo "Puedes Borrar la carpeta Matixploit de tu carpeta personal"
 sleep 1
 echo "Los datos Serán guardados en la carpeta $HOME"
-cd $WD
+cd 
 echo "interfaz="$interfaz"" >> mtsconfig.sh
 echo "monitor="$monitor"" >> mtsconfig.sh
-echo "WorkDirectory="$PWD"" >> mtsconfig.sh   
+echo "WorkDirectory="$PWD"" >> mtsconfig.sh
+read -e "Introduce Aquí tu nombre" name
+echo "name="$name"" >> mtsconfig.sh
 sleep 3
 sudo chmod +777 mts mtsconfig.sh matisploit
 sudo cp mts mtsconfig.sh matisploit  /usr/local/bin/
