@@ -4,7 +4,18 @@ echo "$WD"
 echo "###############################"
 echo "####INSTALANDO DEPENDENCIAS####"
 echo "###############################"
+ YUM_CMD=$(which dnf)
+  APT_GET_CMD=$(which apt-get)
+  PACMAN_CMD=$(which pacman)
+ if [[ ! -z $YUM_CMD ]]; then
+sudo dnf install net-tools crunch nmap aircrack-ng macchanger cupp
+ elif [[ ! -z $APT_GET_CMD ]]; then
 sudo apt -y install net-tools crunch nmap aircrack-ng macchanger cupp
+ elif [[ ! -z $PACMAN_CMD ]]; then
+sudo pacman -S net-tools crunch nmap aircrack-ng macchanger cupp 
+   
+ fi
+
 echo "Selecciona tu interfaz de red, (probablemente sea wlo1 o wlan0) ;)"
 cd /sys/class/net && select foo in *; do echo $foo selected; break; done
 mon="$foo"
