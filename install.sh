@@ -31,7 +31,7 @@ cd
 echo "interfaz="$interfaz"" >> mtsconfig.sh
 echo "monitor="$monitor"" >> mtsconfig.sh
 echo "WorkDirectory="$PWD"" >> mtsconfig.sh
-read -e "Introduce Aquí tu nombre" name
+read -p "Introduce Aquí tu nombre : " name
 echo "name="$name"" >> mtsconfig.sh
 sleep 3
 sudo chmod +777 mts mtsconfig.sh matisploit
