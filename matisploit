@@ -376,7 +376,7 @@ echo -e "              $green
 
 
 echo "					"										
-echo "Bienvenido a Matisploit $USER .  Tu tarjeta de red es $interfaz y su monitor es $monitor "
+echo "Bienvenido a Matisploit $name .  Tu tarjeta de red es $interfaz y su monitor es $monitor "
 echo -e "$green SELECCIONE UNA OPCION $nc"
 echo "Tipee 'helpp' para ayuda"
 
