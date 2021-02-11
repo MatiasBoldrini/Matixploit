@@ -1,11 +1,11 @@
 # Instalacion :
-Solo disponible para sistemas derivados de Arch, Debain o Red hat. Proximamente vca a estar disponible para sistemas mas complejos, como freeBSD , gentoo u otro, pero, no voy a dejar las newbie-instructions , porque supongo que no hace falta que instales el script, ya que quizas hay mejores opciones como fluxion o lazyscript, pero esto al menos no rompe el sistema :).
+Solo disponible para sistemas derivados de Arch, Debain o Red hat. Proximamente vca a estar disponible para sistemas mas complejos, como freeBSD , gentoo u otro, pero, no voy a dejar las newbie-instructions , porque supongo que no hace falta que instales el script, ya que quizas hay mejores opciones como fluxion o lazyscript, pero esto al menos no rompe el sistema :). MatiasBoldrini
 # Debian : 
-sudo apt -y install git;git clone https://github.com/ShadowFighter99/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
+sudo apt -y install git;git clone https://github.com/MatiasBoldrini/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
 # Arch:
-sudo pacman -S install git;git clone https://github.com/ShadowFighter99/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
+sudo pacman -S install git;git clone https://github.com/MatiasBoldrini/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
 # Fedora :
-sudo dnf install git;git clone https://github.com/ShadowFighter99/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
+sudo dnf install git;git clone https://github.com/MatiasBoldrini/Matixploit && cd Matixploit &&  sudo chmod +x * && ./install.sh
 # Comandos:
 **Ataques Wifi(opcion 1 del menu principal)**
 La opcion 1, crackea una red wifi con ayuda de un diccionario, para crearlo, seleccionar la opcion 2 del menu principal.
