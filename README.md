@@ -19,8 +19,7 @@ La opcion 4, 5 , 6 son funciones de mapeo de red que no van a ser utiles hasta q
 Estas opciones lo unico que hacen es desactivar el modo monitor, lo cual sirve para restablecer la conexion a la red.
 # Cambiador de Mac:
 Con la opcion N°6, se puede "Enmascarar" tu direccion mac, de cualquier manera, estoy creando un diccionario para falsificar el fabricante. Ya que el anterior está en algún lugar de google drive o borrado.
-# MSFVENOM
-Voy a añadir msfvenom cuando vea q tiene compatibilidad con android 9, me parece inutil meterlo por ahora.., al menos para el hacking de teléfonos.
+
 # Instrucciones:
 Presionar el numero 1 (Ataques wifi), y elegir una opcion (1 o 3), El script es muy intuitivo, pero De cualquier manera, hay que saber esto:
 
